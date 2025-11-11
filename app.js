@@ -4,7 +4,7 @@ import usersRouter from './routes/users.router.js';
 import { eduTest, eduUsersTest } from './app/middlewares/edu/edu.middleware.js';
 
 const app = express();
-app.use(express.json()); //JSON으로 요청이 올경우 파싱 처리
+app.use(express.json()); // JSON으로 요청이 올 경우 파싱 처리
 app.use(eduTest); // 커스텀 미들웨어 전역 등록
 
 // 클라이언트가 '/api/hi' 경로로 GET 요청을 보낼 때 실행되는 Router
@@ -51,14 +51,14 @@ app.get('/api/posts/:id', (request, response, next) => {
 });
 
 // JSON 요청 제어
-// `Request.body`를 통해서 접근 가능
-app.post('/api/posts', (request, response, next)=> {
+// `Request.body`를 통해서 접근 가능 (** express.json() 추가 필요 **)
+app.post('/api/posts', (request, response, next) => {
   const {account, password, name} = request.body;
+  response.status(200).send({password, account, name});
+  
   // const account = request.body.account;
   // const password = request.body.password;
   // const name = request.body.name;
-  response.status(200).send({account, password, name});
-
   // response.status(200).send({
   //   password: password
   //   ,account: account
@@ -70,7 +70,7 @@ app.post('/api/posts', (request, response, next)=> {
 // 라우트 그룹
 // ----------------
 // 라우트를 모듈로 나누고 그룹핑하여 관리
-app.use('/', authRouter);
+app.use('/api', authRouter);
 app.use('/api/users', eduUsersTest, usersRouter);
 
 // -------------
